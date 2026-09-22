@@ -38,3 +38,10 @@ jobs:
           git add seen_requests.db
           git diff --staged --quiet || git commit -m "Update seen requests [skip ci]"
           git push
+      - name: Upload debug page if no listings found
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-page
+          path: debug_page.html
+          if-no-files-found: ignore
