@@ -78,6 +78,7 @@ KEYWORDS = [
     "junior data analyst",
     "entry level data analyst",
 ]
+
 DB_PATH = Path(__file__).parent / "seen_requests.db"
 POLL_INTERVAL_SECONDS = 600  # 10 minutes — see reasoning in the write-up
 REQUEST_TIMEOUT_MS = 30000
@@ -256,6 +257,11 @@ async def run_once():
 
     listings = parse_listings(html)
     print(f"[{datetime.now(timezone.utc)}] Fetched {len(listings)} listings.")
+
+    if len(listings) == 0:
+        debug_path = Path(__file__).parent / "debug_page.html"
+        debug_path.write_text(html, encoding="utf-8")
+        print(f"[{datetime.now(timezone.utc)}] 0 listings — wrote raw page to {debug_path} for inspection.")
 
     new_matches = 0
     for item in listings:
